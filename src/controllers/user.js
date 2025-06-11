@@ -13,8 +13,10 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id', async (req, res, next) => {
+    const { id } = req.params;
+
     try {
-        const user = await User.findOne({ id: req.params.id });
+        const user = await User.findOne({ id });
         if (!user) {
             throw new HttpError('アカウントが存在しません。', 404);
         }
@@ -38,7 +40,7 @@ router.post('/', async (req, res, next) => {
     try {
         const exists = await User.findOne({ id });
         if (exists) {
-            throw new HttpError('既にアカウントが存在します。', 409);
+            throw new HttpError('アカウントが既に存在します。', 409);
         }
 
         const user = new User();
@@ -49,11 +51,11 @@ router.post('/', async (req, res, next) => {
         user.remarks = remarks;
         user.isActive = isActive;
         user.createdAt = new Date();
-        user.createdBy = '';
-        user.createdById = '';
+        user.createdBy = req.userName;
+        user.createdById = req.userId;
         user.updatedAt = new Date();
-        user.updatedBy = '';
-        user.updatedById = '';
+        user.updatedBy = req.userName;
+        user.updatedById = req.userId;
         await user.save();
 
         res.status(201).json(user);
@@ -63,6 +65,8 @@ router.post('/', async (req, res, next) => {
 });
 
 router.put('/:id', async (req, res, next) => {
+    const { id } = req.params;
+
     const {
         name,
         role,
@@ -72,7 +76,7 @@ router.put('/:id', async (req, res, next) => {
     } = req.body;
 
     try {
-        const user = await User.findOne({ id: req.params.id })
+        const user = await User.findOne({ id })
         if (!user) {
             throw new HttpError('アカウントが存在しません。', 404);
         }
@@ -83,8 +87,8 @@ router.put('/:id', async (req, res, next) => {
         user.remarks = remarks;
         user.isActive = isActive;
         user.updatedAt = new Date();
-        user.updatedBy = '';
-        user.updatedById = '';
+        user.updatedBy = req.userName;
+        user.updatedById = req.userId;
         await user.save();
 
         res.status(200).json(user);
@@ -104,8 +108,8 @@ router.delete('/:id', async (req, res, next) => {
 
         user.isActive = false;
         user.updatedAt = new Date();
-        user.updatedBy = '';
-        user.updatedById = '';
+        user.updatedBy = req.userName;
+        user.updatedById = req.userId;
         await user.save();
 
         res.status(200).json(user);
