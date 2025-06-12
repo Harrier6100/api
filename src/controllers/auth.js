@@ -54,6 +54,27 @@ router.put('/me', verifyToken, async (req, res, next) => {
     }
 });
 
+router.put('/me/email', verifyToken, async (req, res, next) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ id: req.userId });
+        if (!user) {
+            throw new HttpError('アカウントが存在しません。', 404);
+        }
+
+        user.email = email;
+        user.updatedAt = new Date();
+        user.updatedBy = req.userName;
+        user.updatedById = req.userId;
+        await user.save();
+
+        res.status(200).json(user);
+    } catch (err) {
+        next(err);
+    }
+});
+
 router.put('/me/password', verifyToken, async (req, res, next) => {
     const { password } = req.body;
 
