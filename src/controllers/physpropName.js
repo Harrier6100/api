@@ -81,7 +81,7 @@ router.put('/:code', async (req, res, next) => {
     try {
         const physpropName = await PhyspropName.findOne({ code })
         if (!physpropName) {
-            throw new HttpError('アカウントが存在しません。', 404);
+            throw new HttpError('物性コードが存在しません。', 404);
         }
 
         physpropName.name = name;
@@ -107,7 +107,7 @@ router.delete('/:code', async (req, res, next) => {
     try {
         const physpropName = await PhyspropName.findOne({ code });
         if (!physpropName) {
-            throw new HttpError('アカウントが存在しません。', 404);
+            throw new HttpError('物性コードが存在しません。', 404);
         }
 
         physpropName.isActive = false;
