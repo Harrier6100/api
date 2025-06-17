@@ -3,6 +3,7 @@ const router = express.Router();
 const HttpError = require('@/errors/HttpError');
 const PhyspropName = require('@/models/physpropName');
 
+
 router.get('/', async (req, res, next) => {
     try {
         const physpropNames = await PhyspropName.find();
