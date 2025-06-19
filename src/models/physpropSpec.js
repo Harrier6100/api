@@ -20,6 +20,10 @@ const physpropSpecSchema = new Schema({
         uom: String,
         numberSize: Number,
         decimalScale: Number,
+        isTrancate: {
+            type: Boolean,
+            default: false,
+        },
         isRequired: {
             type: Boolean,
             default: false,
