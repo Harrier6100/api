@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const HttpError = require('@/errors/HttpError');
 const PhyspropSpec = require('@/models/physpropSpec');
+const verifyToken = require('@/middlewares/verifyToken');
 
-router.get('/', async (req, res, next) => {
+router.get('/', verifyToken, async (req, res, next) => {
     try {
         const physpropSpecs = await PhyspropSpec.find();
         res.status(200).json(physpropSpecs);
@@ -12,7 +13,7 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.get('/:productCode{/:customerCode}', async (req, res, next) => {
+router.get('/:productCode{/:customerCode}', verifyToken, async (req, res, next) => {
     const{
         productCode,
         customerCode,
@@ -30,7 +31,7 @@ router.get('/:productCode{/:customerCode}', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', verifyToken, async (req, res, next) => {
     const {
         productCode,
         productName,
@@ -69,7 +70,7 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.put('/:productCode{/:customerCode}', async (req, res, next) => {
+router.put('/:productCode{/:customerCode}', verifyToken, async (req, res, next) => {
     const {
         productCode,
         customerCode,
@@ -105,7 +106,7 @@ router.put('/:productCode{/:customerCode}', async (req, res, next) => {
     }
 });
 
-router.delete('/:productCode{/:customerCode}', async (req, res, next) => {
+router.delete('/:productCode{/:customerCode}', verifyToken, async (req, res, next) => {
     const {
         productCode,
         customerCode,

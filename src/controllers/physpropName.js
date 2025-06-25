@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const HttpError = require('@/errors/HttpError');
 const PhyspropName = require('@/models/physpropName');
+const verifyToken = require('@/middlewares/verifyToken');
 
 
-router.get('/', async (req, res, next) => {
+router.get('/', verifyToken, async (req, res, next) => {
     try {
         const physpropNames = await PhyspropName.find();
         res.status(200).json(physpropNames);
@@ -13,7 +14,7 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.get('/:code', async (req, res, next) => {
+router.get('/:code', verifyToken, async (req, res, next) => {
     const{ code } = req.params;
 
     try {
@@ -28,7 +29,7 @@ router.get('/:code', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', verifyToken, async (req, res, next) => {
     const {
         code,
         name,
@@ -67,7 +68,7 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.put('/:code', async (req, res, next) => {
+router.put('/:code', verifyToken, async (req, res, next) => {
     const { code } = req.params;
 
     const {
@@ -102,7 +103,7 @@ router.put('/:code', async (req, res, next) => {
     }
 });
 
-router.delete('/:code', async (req, res, next) => {
+router.delete('/:code', verifyToken, async (req, res, next) => {
     const { code } = req.params;
 
     try {

@@ -33,7 +33,7 @@ router.get('/me', verifyToken, async (req, res, next) => {
     }
 });
 
-router.put('/me', verifyToken, async (req, res, next) => {
+router.put('/me/name', verifyToken, async (req, res, next) => {
     const { name } = req.body;
 
     try {
