@@ -14,11 +14,11 @@ router.get('/', verifyToken, async (req, res, next) => {
     }
 });
 
-router.get('/:id', verifyToken, async (req, res, next) => {
-    const { id } = req.params;
+router.get('/:code', verifyToken, async (req, res, next) => {
+    const { code } = req.params;
 
     try {
-        const user = await User.findOne({ id });
+        const user = await User.findOne({ code });
         if (!user) {
             throw new HttpError('アカウントが存在しません。', 404);
         }
@@ -31,7 +31,7 @@ router.get('/:id', verifyToken, async (req, res, next) => {
 
 router.post('/', verifyToken, async (req, res, next) => {
     const {
-        id,
+        code,
         name,
         role,
         expiryDate,
@@ -40,15 +40,15 @@ router.post('/', verifyToken, async (req, res, next) => {
     } = req.body;
 
     try {
-        const exists = await User.findOne({ id });
+        const exists = await User.findOne({ code });
         if (exists) {
             throw new HttpError('アカウントが既に存在します。', 409);
         }
 
         const user = new User();
-        user.id = id;
+        user.code = code;
         user.name = name;
-        user.password = await bcrypt.hash(id, 10);
+        user.password = await bcrypt.hash(code, 10);
         user.role = role;
         user.expiryDate = expiryDate;
         user.remarks = remarks;
@@ -67,8 +67,8 @@ router.post('/', verifyToken, async (req, res, next) => {
     }
 });
 
-router.put('/:id', verifyToken, async (req, res, next) => {
-    const { id } = req.params;
+router.put('/:code', verifyToken, async (req, res, next) => {
+    const { code } = req.params;
 
     const {
         name,
@@ -79,7 +79,7 @@ router.put('/:id', verifyToken, async (req, res, next) => {
     } = req.body;
 
     try {
-        const user = await User.findOne({ id })
+        const user = await User.findOne({ code })
         if (!user) {
             throw new HttpError('アカウントが存在しません。', 404);
         }
@@ -100,11 +100,11 @@ router.put('/:id', verifyToken, async (req, res, next) => {
     }
 });
 
-router.delete('/:id', verifyToken, async (req, res, next) => {
-    const { id } = req.params;
+router.delete('/:code', verifyToken, async (req, res, next) => {
+    const { code } = req.params;
 
     try {
-        // const user = await User.findOne({ id });
+        // const user = await User.findOne({ code });
         // if (!user) {
         //     throw new HttpError('アカウントが存在しません。', 404);
         // }
@@ -117,7 +117,7 @@ router.delete('/:id', verifyToken, async (req, res, next) => {
 
         // res.status(200).json(user);
 
-        const user = await User.findOneAndDelete({ id });
+        const user = await User.findOneAndDelete({ code });
         if (!user) {
             throw new HttpError('アカウントが存在しません。', 404);
         }

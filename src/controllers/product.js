@@ -20,12 +20,12 @@ router.get('/search', async (req, res, next) => {
     }
 
     try {
-        const productNames = await db.any(`
-            SELECT ${field} FROM product_names
+        const products = await db.any(`
+            SELECT ${field} FROM products
                 WHERE ${filter} ORDER BY ${sort}
         `, req.query);
 
-        res.status(200).json(productNames);
+        res.status(200).json(products);
     } catch (err) {
         next(err);
     }
@@ -35,16 +35,16 @@ router.get('/:productCode', async (req, res, next) => {
     const { productCode } = req.params;
 
     try {
-        const productName = await db.oneOrNone(`
-            SELECT * FROM product_names
+        const product = await db.oneOrNone(`
+            SELECT * FROM products
                 WHERE product_code = \${productCode}
         `, { productCode });
 
-        if (!productName) {
+        if (!product) {
             throw new HttpError('レコードが存在しません。', 404);
         }
 
-        res.status(200).json(productName);
+        res.status(200).json(product);
     } catch (err) {
         next(err);
     }

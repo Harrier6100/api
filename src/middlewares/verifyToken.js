@@ -12,6 +12,7 @@ const verifyToken = (req, res, next) => {
             return next(new HttpError('トークンが無効です。', 401));
         }
         req.userId = decoded.id;
+        req.userCode = decoded.code;
         req.userName = decoded.name;
         next();
     });

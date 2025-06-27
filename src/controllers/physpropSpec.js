@@ -20,7 +20,11 @@ router.get('/:productCode{/:customerCode}', verifyToken, async (req, res, next) 
     } = req.params;
 
     try {
-        const physpropSpec = await PhyspropSpec.findOne({ productCode, customerCode });
+        const filter = { productCode };
+        if (customerCode) {
+            filter.customerCode = customerCode;
+        }
+        const physpropSpec = await PhyspropSpec.findOne(filter);
         if (!physpropSpec) {
             throw new HttpError('物性規格が存在しません。', 404);
         }
@@ -43,7 +47,11 @@ router.post('/', verifyToken, async (req, res, next) => {
     } = req.body;
 
     try {
-        const exists = await PhyspropSpec.findOne({ productCode, customerCode });
+        const filter = { productCode };
+        if (customerCode) {
+            filter.customerCode = customerCode;
+        }
+        const exists = await PhyspropSpec.findOne(filter);
         if (exists) {
             throw new HttpError('物性規格が既に存在します。', 409);
         }
@@ -85,7 +93,11 @@ router.put('/:productCode{/:customerCode}', verifyToken, async (req, res, next) 
     } = req.body;
 
     try {
-        const physpropSpec = await PhyspropSpec.findOne({ productCode, customerCode })
+        const filter = { productCode };
+        if (customerCode) {
+            filter.customerCode = customerCode;
+        }
+        const physpropSpec = await PhyspropSpec.findOne(filter)
         if (!physpropSpec) {
             throw new HttpError('物性規格が存在しません。', 404);
         }
@@ -113,7 +125,11 @@ router.delete('/:productCode{/:customerCode}', verifyToken, async (req, res, nex
     } = req.params;
 
     try {
-        const physpropSpec = await PhyspropSpec.findOne({ productCode, customerCode });
+        const filter = { productCode };
+        if (customerCode) {
+            filter.customerCode = customerCode;
+        }
+        const physpropSpec = await PhyspropSpec.findOne(filter);
         if (!physpropSpec) {
             throw new HttpError('物性規格が存在しません。', 404);
         }

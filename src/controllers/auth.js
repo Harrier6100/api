@@ -12,17 +12,17 @@ const verifyExpiryDate = (date) => {
     return expiryDate.isBefore(moment());
 };
 
-const generateAccessToken = ({ id, name }) => {
-    return jsonwebtoken.sign({ id, name }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+const generateAccessToken = ({ id, code, name }) => {
+    return jsonwebtoken.sign({ id, code, name }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 };
 
-const generateRefreshToken = ({ id, name }) => {
-    return jsonwebtoken.sign({ id, name }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+const generateRefreshToken = ({ id, code, name }) => {
+    return jsonwebtoken.sign({ id, code, name }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 };
 
 router.get('/me', verifyToken, async (req, res, next) => {
     try {
-        const user = await User.findOne({ id: req.userId });
+        const user = await User.findOne({ code: req.userCode });
         if (!user) {
             throw new HttpError('アカウントが存在しません。', 404);
         }
@@ -37,7 +37,7 @@ router.put('/me/name', verifyToken, async (req, res, next) => {
     const { name } = req.body;
 
     try {
-        const user = await User.findOne({ id: req.userId });
+        const user = await User.findOne({ code: req.userCode });
         if (!user) {
             throw new HttpError('アカウントが存在しません。', 404);
         }
@@ -58,7 +58,7 @@ router.put('/me/email', verifyToken, async (req, res, next) => {
     const { email } = req.body;
 
     try {
-        const user = await User.findOne({ id: req.userId });
+        const user = await User.findOne({ code: req.userCode });
         if (!user) {
             throw new HttpError('アカウントが存在しません。', 404);
         }
@@ -79,7 +79,7 @@ router.put('/me/password', verifyToken, async (req, res, next) => {
     const { password } = req.body;
 
     try {
-        const user = await User.findOne({ id: req.userId });
+        const user = await User.findOne({ code: req.userCode });
         if (!user) {
             throw new HttpError('アカウントが存在しません。', 404);
         }
@@ -94,10 +94,10 @@ router.put('/me/password', verifyToken, async (req, res, next) => {
 });
 
 router.post('/login', async (req, res, next) => {
-    const { id, password } = req.body;
+    const { code, password } = req.body;
 
     try {
-        const user = await User.findOne({ id });
+        const user = await User.findOne({ code });
         if (!user || !(await bcrypt.compare(password, user.password))) {
             throw new HttpError('アカウントまたはパスワードが不正です。', 401);
         }
@@ -137,7 +137,7 @@ router.post('/refresh', async (req, res, next) => {
             });
         });
 
-        const user = await User.findOne({ id: decoded.id });
+        const user = await User.findOne({ code: decoded.code });
         if (!user) {
             throw new HttpError('アカウントが存在しません。', 401);
         }

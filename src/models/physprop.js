@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const physpropNameSchema = new Schema({
+const physpropSchema = new Schema({
     _id: Number,
     code: {
         type: String,
@@ -13,6 +13,7 @@ const physpropNameSchema = new Schema({
         required: true,
     },
     uom: String,
+    si_uom: String,
     numberSize: Number,
     localizes: [{
         lang: String,
@@ -42,9 +43,9 @@ const sequences = mongoose.models.sequences
 ? mongoose.models.sequences
 : mongoose.model('sequences', sequenceSchema);
 
-physpropNameSchema.pre('save', function (next) {
+physpropSchema.pre('save', function (next) {
     if (this._id) {
-        sequences.findById('physpropNames')
+        sequences.findById('physprops')
         .then(sequence => {
             if (sequence) {
                 if (this._id > sequence.number) {
@@ -53,7 +54,7 @@ physpropNameSchema.pre('save', function (next) {
                 }
             } else {
                 sequences.create({
-                    _id: 'physpropNames',
+                    _id: 'physprops',
                     number: this._id,
                 });
             }
@@ -65,7 +66,7 @@ physpropNameSchema.pre('save', function (next) {
     }
 
     sequences.findByIdAndUpdate(
-        { _id: 'physpropNames' },
+        { _id: 'physprops' },
         { $inc: { number: 1 }},
         { new: true, upsert: true },
     )
@@ -78,4 +79,4 @@ physpropNameSchema.pre('save', function (next) {
     });
 });
 
-module.exports = mongoose.model('physpropName', physpropNameSchema);
+module.exports = mongoose.model('physprop', physpropSchema);
