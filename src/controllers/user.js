@@ -79,7 +79,7 @@ router.put('/:code', verifyToken, async (req, res, next) => {
     } = req.body;
 
     try {
-        const user = await User.findOne({ code })
+        const user = await User.findOne({ code });
         if (!user) {
             throw new HttpError('アカウントが存在しません。', 404);
         }

@@ -97,7 +97,7 @@ router.put('/:productCode{/:customerCode}', verifyToken, async (req, res, next) 
         if (customerCode) {
             filter.customerCode = customerCode;
         }
-        const physpropSpec = await PhyspropSpec.findOne(filter)
+        const physpropSpec = await PhyspropSpec.findOne(filter);
         if (!physpropSpec) {
             throw new HttpError('物性規格が存在しません。', 404);
         }

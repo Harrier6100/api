@@ -84,7 +84,7 @@ router.put('/:code', verifyToken, async (req, res, next) => {
     } = req.body;
 
     try {
-        const physprop = await Physprop.findOne({ code })
+        const physprop = await Physprop.findOne({ code });
         if (!physprop) {
             throw new HttpError('物性コードが存在しません。', 404);
         }
