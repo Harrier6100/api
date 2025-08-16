@@ -69,7 +69,7 @@ router.post('/', verifyToken, async (req, res, next) => {
     }
 });
 
-router.push('/:code', verifyToken, async (req, res, next) => {
+router.put('/:code', verifyToken, async (req, res, next) => {
     try {
         const { code } = req.params;
 
