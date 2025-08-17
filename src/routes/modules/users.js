@@ -5,7 +5,8 @@ const HttpError = require('@/errors/HttpError');
 const verifyToken = require('@/middlewares/verifyToken');
 const User = require('@/models/user');
 
-router.get('/', verifyToken, async (req, res, next) => {
+// router.get('/', verifyToken, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
         const users = await User.find();
         res.status(200).json(users);
@@ -14,7 +15,8 @@ router.get('/', verifyToken, async (req, res, next) => {
     }
 });
 
-router.get('/:code', verifyToken, async (req, res, next) => {
+// router.get('/:code', verifyToken, async (req, res, next) => {
+router.get('/:code', async (req, res, next) => {
     try {
         const { code } = req.params;
 
@@ -29,7 +31,8 @@ router.get('/:code', verifyToken, async (req, res, next) => {
     }
 });
 
-router.post('/', verifyToken, async (req, res, next) => {
+// router.post('/', verifyToken, async (req, res, next) => {
+router.post('/', async (req, res, next) => {
     try {
         const {
             code,
@@ -69,7 +72,8 @@ router.post('/', verifyToken, async (req, res, next) => {
     }
 });
 
-router.put('/:code', verifyToken, async (req, res, next) => {
+// router.put('/:code', verifyToken, async (req, res, next) => {
+router.put('/:code', async (req, res, next) => {
     try {
         const { code } = req.params;
 
@@ -104,7 +108,8 @@ router.put('/:code', verifyToken, async (req, res, next) => {
     }
 });
 
-router.delete('/:code', verifyToken, async (req, res, next) => {
+// router.delete('/:code', verifyToken, async (req, res, next) => {
+router.delete('/:code', async (req, res, next) => {
     try {
         const { code } = req.params;
 
