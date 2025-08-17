@@ -27,7 +27,6 @@ router.post('/login', async (req, res, next) => {
         const { code, password } = req.body;
 
         const user = await User.findOne({ code });
-        console.log(user);
         if (!user || !(await bcrypt.compare(password, user.password))) {
             throw new HttpError(req.t('error.auth.failed'), 401);
         }
