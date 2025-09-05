@@ -2,13 +2,24 @@ const pgp = require('pg-promise')({
     receive({ data }) {
         if (!data.length) return;
 
+        // 完全移行
+        // data.forEach((row, i) => {
+        //     data[i] = Object.fromEntries(
+        //         Object.entries(row).map(([column, value]) =>
+        //             [pgp.utils.camelize(column), value]
+        //         )
+        //     );
+        // });
+
+        // 移行措置
         data.forEach((row, i) => {
-            data[i] = Object.fromEntries(
-                Object.entries(row).map(([column, value]) => [
-                    pgp.utils.camelize(column),
-                    value
-                ])
-            );
+            const camelize = {};
+            for (const [column, value] of Object.entries(row)) {
+                const camelKey = pgp.utils.camelize(column);
+                camelize[camelKey] = value;
+                camelize[column] = value;
+            }
+            data[i] = camelize;
         });
     }
 });
